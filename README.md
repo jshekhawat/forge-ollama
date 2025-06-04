@@ -39,6 +39,14 @@ Install globally:
 npm install -g @antinomyhq/forge
 ```
 
+If you want to work with OLLAMA Locally:
+
+```bash
+# .env
+IS_OLLAMA=true | false
+```
+The value doesnt matter. There should be a value called IS_OLLAMA.
+
 Sign up at [Antinomy.ai](https://app.antinomy.ai/app/) to enable the Forge provider.
 
 Then set up your Forge provider key:
