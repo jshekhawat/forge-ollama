@@ -1,5 +1,5 @@
 variables:
-  operating_agent: forge
+  mode: PLAN
 commands:
 - name: fixme
   description: Looks for all the fixme comments in the code and attempts to fix them
@@ -18,7 +18,7 @@ commands:
       <lint>cargo +nightly fmt --all; cargo +nightly clippy --fix --allow-staged --allow-dirty --workspace</lint>
       <test>cargo insta test --accept --unreferenced=delete</test>
     - Fix every issue found in the process
-model: anthropic/claude-sonnet-4
+model: qwen3:14b
 max_walker_depth: 1024
 custom_rules: |-
   Handling Errors:
