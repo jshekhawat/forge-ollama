@@ -25,7 +25,6 @@ pub struct Client {
 enum InnerClient {
     OpenAICompat(ForgeProvider),
     Anthropic(Anthropic),
-    Ollama(Ollama)
 }
 
 impl Client {
@@ -61,9 +60,7 @@ impl Client {
                     .with_context(|| {
                         format!("Failed to initialize Anthropic client with URL: {url}")
                     })?,
-            ),
-
-            //Provider::Ollama { url } => InnerClient::Ollama(())
+            )
         };
 
         Ok(Self {

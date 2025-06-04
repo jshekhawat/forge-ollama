@@ -6,7 +6,6 @@ use url::Url;
 pub enum Provider {
     OpenAI { url: Url, key: Option<String> },
     Anthropic { url: Url, key: String },
-    Ollama { url: Url },
 }
 
 impl Provider {
@@ -21,7 +20,6 @@ impl Provider {
                 }
             }
             Provider::Anthropic { .. } => {}
-            Provider::Ollama { .. } => {}
         }
     }
 
@@ -36,7 +34,7 @@ impl Provider {
                 }
             }
             Provider::OpenAI { .. } => {}
-            Provider::Ollama { .. } => {}
+           
         }
     }
 
@@ -45,6 +43,11 @@ impl Provider {
             url: Url::parse(Provider::ANTINOMY_URL).unwrap(),
             key: Some(key.into()),
         }
+    }
+
+    pub fn ollama(_: &str) -> Provider {
+        print!("{}", Provider::OLLAMA_URL);
+        Provider::OpenAI { url: Url::parse(Provider::OLLAMA_URL).unwrap(), key: None }
     }
 
     pub fn openai(key: &str) -> Provider {
@@ -72,7 +75,6 @@ impl Provider {
         match self {
             Provider::OpenAI { key, .. } => key.as_deref(),
             Provider::Anthropic { key, .. } => Some(key),
-            Provider::Ollama { .. } =>  None
         }
     }
 }
@@ -82,14 +84,20 @@ impl Provider {
     pub const OPENAI_URL: &str = "https://api.openai.com/v1/";
     pub const ANTHROPIC_URL: &str = "https://api.anthropic.com/v1/";
     pub const ANTINOMY_URL: &str = "https://antinomy.ai/api/v1/";
-    pub const OLLAMA_URL: &str = "http::/localhost:11434";
+    pub const OLLAMA_URL: &str = "http://localhost:11434/v1/";
 
     /// Converts the provider to it's base URL
     pub fn to_base_url(&self) -> Url {
         match self {
             Provider::OpenAI { url, .. } => url.clone(),
             Provider::Anthropic { url, .. } => url.clone(),
-            Provider::Ollama { url } => url.clone()
+        }
+    }
+
+    pub fn is_ollama(&self) -> bool {
+        match self {
+            Provider::OpenAI { url, .. } => url.as_str().starts_with(Self::OLLAMA_URL),
+            Provider::Anthropic { .. } => false,
         }
     }
 
@@ -97,7 +105,6 @@ impl Provider {
         match self {
             Provider::OpenAI { url, .. } => url.as_str().starts_with(Self::ANTINOMY_URL),
             Provider::Anthropic { .. } => false,
-            Provider::Ollama { url } => false
         }
     }
 
@@ -105,7 +112,6 @@ impl Provider {
         match self {
             Provider::OpenAI { url, .. } => url.as_str().starts_with(Self::OPEN_ROUTER_URL),
             Provider::Anthropic { .. } => false,
-            Provider::Ollama { url } => false
         }
     }
 
@@ -113,7 +119,6 @@ impl Provider {
         match self {
             Provider::OpenAI { url, .. } => url.as_str().starts_with(Self::OPENAI_URL),
             Provider::Anthropic { .. } => false,
-            Provider::Ollama { url } => false
         }
     }
 
@@ -121,7 +126,6 @@ impl Provider {
         match self {
             Provider::OpenAI { .. } => false,
             Provider::Anthropic { url, .. } => url.as_str().starts_with(Self::ANTHROPIC_URL),
-            Provider::Ollama { url } => false
         }
     }
 }
